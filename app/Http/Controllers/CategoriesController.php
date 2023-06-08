@@ -47,12 +47,14 @@ class CategoriesController extends Controller
     public function store(Request $request)
     {
 
+        $xmlPayload = $request->getContent();
+        $obj = simplexml_load_string($xmlPayload);
 
         $category = new Categories();
 
-        $category->name = $request->input('name');
-        $category->lft = $request->input('lft');
-        $category->rgt = $request->input('rgt');
+        $category->name = $obj->name;;
+        $category->lft = $obj->lft;
+        $category->rgt = $obj->rgt;
         $category->save();
 
         $xml = new \SimpleXMLElement('<category></category>');
@@ -68,6 +70,9 @@ class CategoriesController extends Controller
 
     public function update(Request $request, $id)
     {
+        $xmlPayload = $request->getContent();
+        $obj = simplexml_load_string($xmlPayload);
+
         $category = Categories::find($id);
 
         if (!$category) {
@@ -78,7 +83,7 @@ class CategoriesController extends Controller
             'name' => 'required',
         ]);
 
-        $category->name = $request->input('name');
+        $category->name = $obj->name;
         $category->save();
 
         $xml = new \SimpleXMLElement('<category></category>');
