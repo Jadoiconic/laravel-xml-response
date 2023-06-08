@@ -8,16 +8,32 @@ use Illuminate\Http\Response;
 
 class CategoriesController extends Controller
 {
+    // public function index()
+    // {
+    //     $categories = Categories::all();
+    //     return response()->xml(['categories' => $categories->toArray()]);
+    //     // $response = new Response($categories, 200, [
+    //     //     'Content-Type' => 'application/xml',
+    //     // ]);
+
+    //     // return $response;
+    // }
     public function index()
     {
         $categories = Categories::all();
-        $response = new Response($categories, 200, [
-            'Content-Type' => 'application/xml',
-        ]);
+        $xml = new \SimpleXMLElement('<categories></categories>');
+        foreach ($categories as $category) {
+            $node = $xml->addChild('category');
+            $node->addChild('id', $category->id);
+            $node->addChild('name', $category->name);
+            $node->addChild('lft', $category->lft);
+            $node->addChild('rgt', $category->rgt);
+            $node->addChild('created_at', $category->created_at);
+            $node->addChild('updated_at', $category->updated_at);
+        }
 
-        return $response;
+        return response($xml->asXML(), 200, ['Content-Type' => 'application/xml']);
     }
-
     public function show($id)
     {
         $category = Categories::findOrFail($id);
