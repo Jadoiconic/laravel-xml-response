@@ -10,6 +10,8 @@ class Categories extends Model
 {
     use HasFactory;
     //  use NodeTrait;
+    protected $primaryKey = 'id';
+
      protected $fillable = ([
         'name',
         'lft',

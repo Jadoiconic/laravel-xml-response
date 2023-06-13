@@ -31,7 +31,7 @@ class CategoriesController extends Controller
         $category = Categories::find($id);
 
         if (!$category) {
-            return response('<error>Category not found.</error>', 404, ['Content-Type' => 'application/xml']);
+            return response('<error>Category not found.</error>', 200, ['Content-Type' => 'application/xml']);
         }
 
         $xml = new \SimpleXMLElement('<category></category>');
@@ -42,7 +42,7 @@ class CategoriesController extends Controller
         $xml->addChild('created_at', $category->created_at);
         $xml->addChild('updated_at', $category->updated_at);
 
-        return response($xml->asXML(), 200, ['Content-Type' => 'application/xml']);
+        return response($xml->asXML(), 404, ['Content-Type' => 'application/xml']);
     }
     public function store(Request $request)
     {
@@ -52,7 +52,7 @@ class CategoriesController extends Controller
 
         $category = new Categories();
 
-        $category->name = $obj->name;;
+        $category->name = $obj->name;
         $category->lft = $obj->lft;
         $category->rgt = $obj->rgt;
         $category->save();
@@ -65,7 +65,7 @@ class CategoriesController extends Controller
         $xml->addChild('created_at', $category->created_at);
         $xml->addChild('updated_at', $category->updated_at);
 
-        return response($xml->asXML(), 201, ['Content-Type' => 'application/xml']);
+        return response($xml->asXML(), 404, ['Content-Type' => 'application/xml']);
     }
 
     public function update(Request $request, $id)
@@ -76,12 +76,9 @@ class CategoriesController extends Controller
         $category = Categories::find($id);
 
         if (!$category) {
-            return response('<error>Category not found.</error>', 404, ['Content-Type' => 'application/xml']);
+            return response('<error>Category not found.</error>', 200, ['Content-Type' => 'application/xml']);
         }
 
-        $request->validate([
-            'name' => 'required',
-        ]);
 
         $category->name = $obj->name;
         $category->save();
@@ -94,7 +91,7 @@ class CategoriesController extends Controller
         $xml->addChild('created_at', $category->created_at);
         $xml->addChild('updated_at', $category->updated_at);
 
-        return response($xml->asXML(), 200, ['Content-Type' => 'application/xml']);
+        return response($xml->asXML(), 404, ['Content-Type' => 'application/xml']);
     }
 
     public function destroy($id)
@@ -102,11 +99,14 @@ class CategoriesController extends Controller
         $category = Categories::find($id);
 
         if (!$category) {
-            return response('<error>Category not found.</error>', 404, ['Content-Type' => 'application/xml']);
+            return response('<error>Category not found.</error>', 200, ['Content-Type' => 'application/xml']);
         }
 
         $category->delete();
 
-        return response('<message>Category deleted successfully.</message>', 200, ['Content-Type' => 'application/xml']);
+        return response('<message>Category deleted successfully.</message>', 404, ['Content-Type' => 'application/xml']);
     }
+
+
+
 }
